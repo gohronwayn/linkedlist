@@ -119,18 +119,18 @@ class LinkedList:
         Raises
             IndexError if n > length
         """
-        if n == 0:
-            temp = self._head
-            self._head = Node(item)
-            self._head.next = temp
+        if n == 0: #inserts node at head
+            temp = self._head #sets the original head as a variable
+            self._head = Node(item) #sets the new head of the linkedlist as item
+            self._head.next = temp #connects the new head (item) to the original head
             return
-        last = self._head
-        current = self._head.next
+        last = self._head #gives previous node a variable
+        current = self._head.next 
         for i in range(n - 1):
             if current == None:
                 raise IndexError
             last = current
-            current = current.next
+            current = current.next 
         last.next = Node(item)
         last.next.next = current
 

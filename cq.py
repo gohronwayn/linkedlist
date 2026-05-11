@@ -20,9 +20,9 @@ class CircularQueue:
 
     def __init__(self, size: int):
         self.size = size
-        # Delete the line below and write your code here
-        raise NotImplementedError("__init__ not implemented")
-
+        self._arr = [None]*size
+        self.head = -1
+        self.tail = 0
     def __repr__(self) -> str:
         return f"CircularQueue({self.size})"
 
@@ -36,8 +36,17 @@ class CircularQueue:
         Return
             None
         """
-        # Delete the line below and write your code here
-        raise NotImplementedError("enqueue not implemented")
+        if self.tail == -1:
+            raise IndexError("Shi full bro")
+        else:
+            self._arr[self.tail] = item
+            if self.head == -1:
+                self.head = self.tail
+            if (self.tail+1)%self.size == self.head:
+                self.tail = -1
+            else:
+                self.tail += 1
+                self.tail %= self.size
 
     def dequeue(self) -> tuple[int, int]:
         """Return the item at the head of the queue.
@@ -48,11 +57,26 @@ class CircularQueue:
         Return
             item
         """
-        # Delete the line below and write your code here
-        raise NotImplementedError("dequeue not implemented")
+        if self.head == -1:
+            raise IndexError("Shi empty bro")
+        else:
+            item = self._arr[self.head]
+            if self.tail == -1:
+                self.tail = self.head
+            if (self.head+1)%self.size == self.head:
+                self.head = +1
+            else:
+                self.head += 1
+                self.head %= self.size
+            return item
 
 
 if __name__ == "__main__":
     # Write any test code here and run it with
     # `python cq.py`
-    pass
+    q = CircularQueue(5)
+    for i in range(5):
+        q.enqueue(i)
+    for i in range(3):
+        print(q.dequeue())
+

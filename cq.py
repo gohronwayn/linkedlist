@@ -25,6 +25,20 @@ class CircularQueue:
         self.tail = 0
     def __repr__(self) -> str:
         return f"CircularQueue({self.size})"
+    def contains(self, item):
+        end = self.tail
+        i = self.head
+        if self.is_full():
+            i = (self.head+1)%self.size
+            end = self.head
+        elif self.is_empty():
+            return False
+        while i != end:
+            if self._arr[i] == item:
+                return True
+            i += 1
+            i %= self.size
+        return False
 
     def enqueue(self, item: tuple[int, int]) -> None:
         """Add item at the end of the queue.
@@ -36,18 +50,15 @@ class CircularQueue:
         Return
             None
         """
-        if self.tail == -1:
-            raise IndexError("Shi full bro")
+        if self.is_full():
+            raise IndexError("Queue is full")
+        elif self.isempty():
+            self.head = 0
+            self.arr[self.tail] = item
         else:
-            self._arr[self.tail] = item
-            if self.head == -1:
-                self.head = self.tail
-            if (self.tail+1)%self.size == self.head:
-                self.tail = -1
-            else:
-                self.tail += 1
-                self.tail %= self.size
-
+            self.tail = (self.tail + 1) % self.size
+            self.arr[self.tail] = item
+        
     def dequeue(self) -> tuple[int, int]:
         """Return the item at the head of the queue.
 
@@ -57,19 +68,21 @@ class CircularQueue:
         Return
             item
         """
-        if self.head == -1:
-            raise IndexError("Shi empty bro")
+        if self.is_empty():
+            raise IndexError("Queue is empty")
         else:
             item = self._arr[self.head]
-            if self.tail == -1:
-                self.tail = self.head
-            if (self.head+1)%self.size == self.head:
-                self.head = +1
-            else:
-                self.head += 1
-                self.head %= self.size
+            self.head = (self.head - 1) % self.size
             return item
+        
+        
 
+    def is_empty(self):
+        return self.head == -1
+
+    def is_full(self):
+        return (self.tail + 1) % self.size == self.head
+    
 
 if __name__ == "__main__":
     # Write any test code here and run it with
@@ -79,4 +92,5 @@ if __name__ == "__main__":
         q.enqueue(i)
     for i in range(3):
         print(q.dequeue())
+    print(q.contains(4))
 
